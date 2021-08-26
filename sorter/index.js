@@ -32,12 +32,10 @@ class Service {
             nodir: true,
             absolute: true
         };
-        glob("**/*.jpg", options, (err, files) => {
+        glob(this._in_path + "/**/*.jpg", options, (err, files) => {
             files.forEach(original_file => {
                 //2020-04-10 00.07.15.jpg
                 let in_filename = path.basename(original_file);
-                let in_dirname = path.dirname(original_file);
-                let folder_date = in_dirname.split("/").pop();
                 let file_date = in_filename.split(" ")[0];
                 let output_path = this._out_path + "/" + file_date;
                 if (!fs.existsSync(output_path)) {
@@ -50,8 +48,6 @@ class Service {
             });
         });
     }
-
-
 
     movefile(in_file, out_file) {
         if (this._dry_run) {
