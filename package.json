@@ -1,0 +1,63 @@
+{
+  "_from": "github:mtempels/nyc-file-sorter",
+  "_id": "nyc-file-sorter@1.2.0",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/nyc-file-sorter",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "mtempels/nyc-file-sorter",
+    "rawSpec": "mtempels/nyc-file-sorter",
+    "saveSpec": "github:mtempels/nyc-file-sorter",
+    "fetchSpec": null,
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "github:mtempels/nyc-file-sorter#92d04681ec458c1c717c6797686edd628871c51b",
+  "_spec": "mtempels/nyc-file-sorter",
+  "_where": "/data/websites",
+  "author": {
+    "name": "Matthijs Tempels",
+    "email": "matthijs@townsville.nl"
+  },
+  "bin": {
+    "nyc-file-sorter": "index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/mtempels/nyc-file-sorter/issues"
+  },
+  "bundleDependencies": [
+    "townsville-logger",
+    "moment",
+    "nconf",
+    "async"
+  ],
+  "dependencies": {
+    "async": "^2.6.1",
+    "glob": "^7.1.7",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
+    "nconf": "0.10.0",
+    "townsville-logger": "github:mtempels/townsville-logger"
+  },
+  "deprecated": false,
+  "description": "NYC Timescape Indexer",
+  "homepage": "https://github.com/mtempels/nyc-file-sorter#readme",
+  "license": "Copyright Townsville.nl",
+  "main": "index.js",
+  "name": "nyc-file-sorter",
+  "preferGlobal": true,
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mtempels/nyc-file-sorter.git"
+  },
+  "scripts": {
+    "setup": ""
+  },
+  "version": "1.0.0"
+}
