@@ -15,13 +15,26 @@ const glob = require("glob")
 /**
  * Main service class
  */
-class Service {
+class SorterService {
     /**
      * Class constructor
      * @param {object} settings Service settings
      */
     constructor(settings) {
-        this._init(settings);
+        this.init(settings);
+    }
+
+    /**
+     * Init class
+     * @param {object} settings Settings object
+     * @throws {Error} If settings are bad
+     */
+     init(settings) {
+        this._in_path = settings.in_path;
+        this._out_path = settings.out_path;
+        this._dry_run = settings.dry_run;
+        this._log = logger.createLogger('mover');
+        this.run();
     }
 
     /**
@@ -33,6 +46,7 @@ class Service {
             absolute: true
         };
         glob(this._in_path + "/**/*.jpg", options, (err, files) => {
+            if (err) throw err;
             files.forEach(original_file => {
                 //2020-04-10 00.07.15.jpg
                 let in_filename = path.basename(original_file);
@@ -51,9 +65,9 @@ class Service {
 
     movefile(in_file, out_file) {
         if (this._dry_run) {
-            this._log.debug("[DRY RUN] I would move %s to %s... ", in_file, out_file);
+            this._log.info("[DRY RUN] I would move %s to %s... ", in_file, out_file);
         } else {
-            this._log.debug("Moving %s to %s... ", in_file, out_file);
+            this._log.info("Moving %s to %s... ", in_file, out_file);
             fs.rename(in_file, out_file, (err) => {
                 if (err) throw err;
             });
@@ -63,26 +77,11 @@ class Service {
     /**
      * Close service
      */
-    close() {
-
-    }
-
-
-    // ---- Private ----
-
-    /**
-     * Init class
-     * @param {object} settings Settings object
-     * @throws {Error} If settings are bad
-     */
-    _init(settings) {
-        this._in_path = settings.in_path;
-        this._out_path = settings.out_path;
-        this._dry_run = settings.dry_run;
-        this._log = logger.createLogger('mover');
-        this.run();
+    stop(cb) {
+        this._log.warn("OH NO, FATAL EXCEPTION!");
+        cb();
     }
 }
 
 // Exports
-module.exports = Service;
+module.exports = SorterService;

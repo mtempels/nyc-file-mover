@@ -12,11 +12,12 @@
 const fs = require('fs');
 const logger = require('townsville-logger');
 const nconf = require('nconf');
-const Service = require('./sorter/index.js');
+const SorterService = require('./sorter/index.js');
 const util = require('util');
 const path = require('path');
-
-global.appRoot = path.resolve(__dirname);
+const {
+    Console
+} = require('console');
 
 /**
  * Show usage and exit
@@ -37,31 +38,22 @@ function doUsageExit() {
 function handleCommandLine() {
     // Favor commandline params
     nconf.argv();
-
     // Check help
     if (nconf.get('help') || !nconf.get('in') || !nconf.get('out')) {
         doUsageExit();
     }
-
-    // Check config file
+    // Check parameters
     let in_path = nconf.get('in');
     let out_path = nconf.get('out');
     let dry_run = nconf.get('dry-run');
-
     if (!fs.existsSync(in_path)) {
         console.log(util.format('Input Folder "%s" not found', in_path));
         doUsageExit();
     }
-
     if (!fs.existsSync(out_path)) {
         console.log(util.format('Output folder "%s" not found', out_path));
         doUsageExit();
     }
-
-    if (dry_run) {
-
-    }
-
     return {
         "in_path": in_path,
         "out_path": out_path,
@@ -99,16 +91,26 @@ process.on('uncaughtException', (err) => {
 
     // Close the service
     if (inst) {
-        inst.close();
+        inst.stop(() => {
+            process.exit(1);
+        });
     }
 
-    // Wait a bit before exit (and hope the log flushes)
+    // After 10 seconds close anyway.. (and hope the log flushes)
     setTimeout(
         () => {
-            process.exit(1);
+            process.exit(2);
         },
-        1000
+        10000
     );
+});
+
+process.on('exit', () => {
+    if (log) {
+        log.info("Appliction exit!");
+    } else {
+        console.log("Application exit!");
+    }
 });
 
 // Handle commandline
@@ -116,12 +118,10 @@ let params = handleCommandLine();
 
 // Get log settings
 const logSettings = {
-    "name": "nyc-file-sorter",
+    "name": "file-sorter",
     "showName": true,
     "level": "debug",
-    "levels": {
-        "json-rest-server": "debug"
-    },
+    "levels": {},
     "console": {
         "colorize": true
     },
@@ -133,10 +133,8 @@ const logSettings = {
         }
     }
 }
-
 logger.init(logSettings);
 log = logger.createLogger('index');
 log.info('Application V%s started', getVersion());
-console.log(params);
 // Instantiate service
-inst = new Service(params);
+inst = new SorterService(params);
